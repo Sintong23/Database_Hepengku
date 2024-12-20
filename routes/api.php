@@ -36,3 +36,5 @@ Route::get('/summary', function () {
 });
 
 Route::get('/transactions', [TransactionController::class, 'index']);
+Route::put('/transactions/{id}/amount', [TransactionController::class, 'updateAmount']);
+Route::get('/transactions/date/{date}', [TransactionController::class, 'getTransactionsByDate']);
