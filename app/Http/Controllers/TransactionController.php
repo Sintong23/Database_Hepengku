@@ -67,7 +67,7 @@
             't.type',
             't.note'
         )
-        ->whereDate('t.date', '=', $date) // Pastikan ini sesuai dengan format tanggal
+        ->whereDate('t.date', '=', $date)
         ->get();
 
     $totalIncome = $transactions->where('type', 'income')->sum('amount');
