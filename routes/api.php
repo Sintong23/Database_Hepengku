@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Transaction;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\CategoryController;
 
 
 /*
@@ -38,3 +39,5 @@ Route::get('/summary', function () {
 Route::get('/transactions', [TransactionController::class, 'index']);
 Route::put('/transactions/{id}/amount', [TransactionController::class, 'updateAmount']);
 Route::get('transactions/date/{date}', [TransactionController::class, 'getTransactionsByDate']);
+
+Route::get('/categories', [CategoryController::class, 'getCategories']);

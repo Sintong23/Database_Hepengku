@@ -80,6 +80,18 @@
     ]);
 }
 
+
+
+public function getCategories()
+{
+    $categories = DB::table('categories')
+        ->select('id', 'name', 'icon')
+        ->get();
+
+    return response()->json($categories);
+}
+
+
    
 
 }
