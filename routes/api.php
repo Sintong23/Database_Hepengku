@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Transaction;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ChartController;
+use App\Http\Controllers\CategoryController;
 
 
 /*
@@ -41,3 +42,7 @@ Route::get('/transactions', [TransactionController::class, 'index']);
 Route::get('/chart/income', [ChartController::class, 'getIncomeData']);
 
 Route::get('/chart/expense', [ChartController::class, 'getExpenseData']);
+Route::put('/transactions/{id}/amount', [TransactionController::class, 'updateAmount']);
+Route::get('transactions/date/{date}', [TransactionController::class, 'getTransactionsByDate']);
+
+Route::get('/categories', [CategoryController::class, 'getCategories']);
