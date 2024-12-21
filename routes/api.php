@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Transaction;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ChartController;
 
 
 /*
@@ -36,3 +37,7 @@ Route::get('/summary', function () {
 });
 
 Route::get('/transactions', [TransactionController::class, 'index']);
+
+Route::get('/chart/income', [ChartController::class, 'getIncomeData']);
+
+Route::get('/chart/expense', [ChartController::class, 'getExpenseData']);
