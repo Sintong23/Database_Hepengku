@@ -92,6 +92,97 @@ public function getCategories()
 }
 
 
+
+public function store(Request $request)
+{
+    \Log::info('Incoming Request:', $request->all());
+
+    $validated = $request->validate([
+        'date' => 'required|date',
+        'amount' => 'required|integer|min:0',
+        'type' => 'required|in:income,expense',
+        'category_id' => 'required|exists:categories,id',
+        'note' => 'nullable|string',
+    ]);
+
+    $transaction = Transaction::create($validated);
+
+    \Log::info('Transaction Created:', $transaction->toArray());
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Transaction saved successfully',
+        'data' => $transaction,
+    ], 201);
+}
    
+
+public function getExpenseSummary()
+{
+    $expenses = \DB::table('transactions')
+        ->join('categories', 'transactions.category_id', '=', 'categories.id')
+        ->select(
+            'categories.name as category_name',
+            \DB::raw('SUM(transactions.amount) as total_amount')
+        )
+        ->where('transactions.type', 'expense')
+        ->groupBy('categories.name')
+        ->get();
+
+    $totalExpense = $expenses->sum('total_amount');
+
+    $summary = $expenses->map(function ($expense) use ($totalExpense) {
+        return [
+            'category_name' => $expense->category_name,
+            'percentage' => round(($expense->total_amount / $totalExpense) * 100, 2),
+        ];
+    });
+
+    return response()->json($summary, 200);
+}
+
+public function getIncomeSummary()
+{
+    $incomes = \DB::table('transactions')
+        ->join('categories', 'transactions.category_id', '=', 'categories.id')
+        ->select(
+            'categories.name as category_name',
+            \DB::raw('SUM(transactions.amount) as total_amount')
+        )
+        ->where('transactions.type', 'income')
+        ->groupBy('categories.name')
+        ->get();
+
+    $totalIncome = $incomes->sum('total_amount');
+
+    $summary = $incomes->map(function ($income) use ($totalIncome) {
+        return [
+            'category_name' => $income->category_name,
+            'percentage' => round(($income->total_amount / $totalIncome) * 100, 2),
+        ];
+    });
+
+    return response()->json($summary, 200);
+}
+
+public function destroy($id)
+{
+    $transaction = Transaction::find($id);
+
+    if (!$transaction) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Transaction not found'
+        ], 404);
+    }
+
+    $transaction->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Transaction deleted successfully'
+    ], 200);
+}
+
 
 }

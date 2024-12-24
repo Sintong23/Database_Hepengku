@@ -41,3 +41,10 @@ Route::put('/transactions/{id}/amount', [TransactionController::class, 'updateAm
 Route::get('transactions/date/{date}', [TransactionController::class, 'getTransactionsByDate']);
 
 Route::get('/categories', [CategoryController::class, 'getCategories']);
+
+Route::post('/transactions', [TransactionController::class, 'store']);
+
+Route::delete('/transactions/{id}', [TransactionController::class, 'destroy']);
+
+Route::get('/transactions/expense-summary', [TransactionController::class, 'getExpenseSummary']);
+Route::get('/transactions/income-summary', [TransactionController::class, 'getIncomeSummary']);
